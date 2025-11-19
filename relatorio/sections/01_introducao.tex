@@ -1,0 +1,22 @@
+\section{Introdução}
+\label{sec:introducao}
+
+Os Large Language Models (LLMs) em muito expandiram a fronteira da geração de texto em linguagem natural. Esses modelos demonstram uma capacidade de produzir conteúdo fluente, coeso e contextualmente relevante, sendo cada vez mais difícil distingui-los da escrita humana em diversos cenários \cite{wang-etal-2024-semeval-2024}. Embora essa tecnologia ofereça avanços significativos, ela também apresenta riscos substanciais, como a disseminação automatizada de desinformação, a erosão da integridade acadêmica e a automação de fraudes.
+
+Em resposta a esses riscos, a Detecção de Texto Gerado por Máquina (Machine Generated Text Detection - MGTD) emergiu como um relevante campo de pesquisa. Os métodos atuais de MGTD, embora eficazes para geradores conhecidos, demonstram uma fragilidade significativa em robustez, falhando em generalizar para modelos não vistos ou domínios fora de distribuição (OOD) \cite{yang2023surveydetectionllmsgeneratedcontent, kuznetsov-etal-2024-robust}. Muitos detectores SOTA (State-of-the-Art) parecem depender de artefatos estatísticos específicos do gerador ou do domínio de treinamento, em vez de características semânticas ou estilísticas fundamentais.
+
+Em paralelo, a literatura emergente sugere que os LLMs podem possuir um "viés estilístico" intrínseco. Estudos recentes \cite{Reinhart_2025, Mu_oz_Ortiz_2024} indicam que os LLMs, especialmente aqueles ajustados por instrução (instruction-tuned), tendem a produzir textos "informacionalmente densos" que favorecem uma linguagem mais objetiva em detrimento da expressão subjetiva, que é uma característica da autoria humana \cite{pang-lee-2004-sentimental}. 
+
+Assim, a análise de sentimentos, mais especificamente a Detecção de Subjetividade (Subjectivity Detection - SD) surge como uma possível ferramenta auxiliar na MGTD. Como mostrado em \cite{chaturvedi}, a SD é um tema em pesquisa há algumas décadas, começando por modelos com "features" criadas manualmente, como Naive-Bayes e árvores, passando por aprendizagem automático de features e por modelos baseados em vetores de palavras neurais. Já a literatura mais recente \cite{song2025largelanguagemodelssubjective} mostra como "LLMs são mais adaptadas a modelar julgamentos sútis como humanos".
+
+Este trabalho propõe-se a investigar essa lacuna. O objetivo não é apenas avaliar a efetividade de detectores, mas principalmente analisar como a característica linguística da subjetividade impacta a eficácia da detecção. Para tal, formulamos duas questões centrais:
+\begin{itemize}
+    \item \textbf{Q1:} Existe uma diferença estatisticamente significativa na propensão à subjetividade/objetividade entre textos gerados por humanos e por LLMs?
+    \item \textbf{Q2:} O desempenho dos classificadores MGTD é influenciado pelo nível de subjetividade de um texto? (i.e., textos objetivos são mais fáceis ou difíceis de detectar como sendo de IA?)
+\end{itemize}
+
+Para responder a estas questões, adotamos uma metodologia de análise controlada. Treinamos dois classificadores especializados usando a mesma arquitetura base (BERT-base) com adaptadores LoRA (Low-Rank Adaptation): um Modelo de Classificação de Subjetividade ($M_{SD}$) treinado no corpus NewsSD-ENG \cite{antici2024corpussentencelevelsubjectivitydetection}, e um Modelo de Detecção MGTD ($M_{MGTD}$) treinado nos dados da SemEval-2024 Task 8 \cite{wang-etal-2024-semeval-2024}. Subsequentemente, utilizamos o $M_{SD}$ para dissecar o desempenho do $M_{MGTD}$, avaliando sua robustez em estratificações de texto objetivas e subjetivas.
+
+As contribuições deste trabalho são uma análise quantitativa da correlação entre subjetividade e autoria de LLMs e uma avaliação da robustez de detectores MGTD padrão em relação a este viés estilístico.
+
+O restante deste artigo está estruturado da seguinte forma: A Seção \ref{sec:trabalhos_relacionados} revisa a literatura em SD e MGTD. A Seção \ref{sec:analise_datasets} detalha os corpora utilizados. A Seção \ref{sec:metodo} apresenta nossa arquitetura unificada e a metodologia de análise. A Seção \ref{sec:resultados} apresenta os resultados experimentais. Finalmente, as seções \ref{sec:conclusao}, \ref{sec:limitacoes} e \ref{sec:consideracoes_eticas} discutem as conclusões, limitações e implicações éticas do estudo.

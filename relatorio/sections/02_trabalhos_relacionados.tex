@@ -1,0 +1,34 @@
+\section{Trabalhos Relacionados}
+\label{sec:trabalhos_relacionados}
+
+Esta seção avalia o estado da arte acadêmico em duas áreas centrais do Processamento de Linguagem Natural (Natural Language Processing - NLP): Detecção de Subjetividade (SD) e Detecção de Texto Gerado por Máquina (MGTD). Embora tradicionalmente investigadas como campos de estudo separados, objetivamos avaliar se a análise de características estilísticas como subjetividade pode auxiliar no âmbito de MGTD.
+
+\subsection{Detecção de Subjetividade}
+\label{ssec:fundamentos_cs}
+
+A primeira tarefa envolve a distinção entre sentenças que apresentam fatos (objetivas) e aquelas que expressam opiniões (subjetivas). \citet{pang-lee-2004-sentimental} é um trabalho seminal que introduziu o "Cornell Subjectivity Dataset v1.0 (SUBJ)". O dataset consiste em 5000 sentenças extraídas de resumos de enredo do IMDb (consideradas objetivas) e 5000 sentenças extraídas de críticas de usuários do Rotten Tomatoes (consideradas subjetivas). A pesquisa subsequente reconheceu as limitações deste dataset, onde o domínio (enredo vs. crítica) não é um substituto perfeito para a propriedade linguística da subjetividade. A literatura moderna moveu-se em direção a anotações explícitas.
+
+Introduzido por \citet{bjerva2020subjqadatasetsubjectivityreview}, o dataset \textbf{SubjQA} foca na subjetividade dentro do contexto de Question Answering (QA). O dataset \textbf{NewsSD-ENG} \cite{antici2024corpussentencelevelsubjectivitydetection} tem como principal contribuição o desenvolvimento de "novas diretrizes de anotação que não se limitam a pistas específicas do idioma" e que podem ser aplicadas a qualquer língua.
+
+\subsection{Detecção de Texto Gerado por Máquina}
+\label{ssec:panorama_mgtd}
+
+O rápido avanço dos LLMs trouxe atenção urgente para a tarefa de MGTD \cite{Fu2025DetectAnyLLM} para mitigar o uso indevido de LLMs. Vários *surveys* recentes mapearam o estado da arte em MGTD \cite{yang2023surveydetectionllmsgeneratedcontent, wu2024surveyllmgeneratedtextdetection}. Estas revisões categorizam as abordagens SOTA da seguinte forma:
+\begin{itemize}
+    \item \textbf{Detecção White-Box vs. Black-Box:} Baseada no acesso do detector ao modelo de origem.
+    \item \textbf{Métodos Zero-Shot:} Detectores que não requerem treinamento em dados específicos de MGTD (ex: baseados em perplexidade).
+    \item \textbf{Métodos Baseados em Fine-Tuning:} A abordagem mais comum, onde um modelo (ex: RoBERTa) é ajustado em uma tarefa de classificação binária (humano vs. máquina).
+\end{itemize}
+
+O desafio unificador em MGTD é a robustez. Os detectores SOTA atuais são notavelmente frágeis e falham em cenários Out-of-Distribution (OOD) \cite{wu2024surveyllmgeneratedtextdetection}, pertubações adversariais, espaçamento randômico ou contra simples parafraseamento \cite{he2024mgtbenchbenchmarkingmachinegeneratedtext}.
+
+O benchmark da tarefaSemEval-2024 Task 8 \cite{wang-etal-2024-semeval-2024} foi explicitamente projetado para testar a robustez dos detectores em cenários complexos (multidomínio, multigerador e multilíngue), dividida em subtarefas de classificação binária (A), detecção de fonte (B) e detecção de ponto de mudança (C). A análise dos sistemas vencedores na SemEval-2024 Task 8 revela a tendência dominante: "Para todas as subtarefas, os melhores sistemas usaram LLMs" \cite{wang-etal-2024-semeval-2024}.
+
+\subsection{Interseção do Problema: Viés Estilístico de LLMs}
+\label{ssec:intersecao}
+
+Esta seção conecta as Tarefas 1 e 2, sintetizando a literatura que analisa as características estilísticas da saída do LLM e como essas características impactam a detecção. A literatura recente começou a quantificar as diferenças estilísticas entre a escrita humana e a gerada por LLM, e um padrão claro está emergindo: LLMs exibem um viés mensurável em direção à objetividade.
+
+\citet{Mu_oz_Ortiz_2024} descobriu que "As saídas dos LLM usam mais números, símbolos e auxiliares (sugerindo linguagem objetiva) do que textos humanos". Em contraste, "Humanos tendem a exibir emoções negativas mais fortes". \citet{Reinhart_2025} mostraram que modelos "instruction-tuned", por serem treinados a responder perguntas e resolver problemas, tendem a ter um estilo de escrita distinto com tendência a nomes e informacionalmente denso, mesmo quando requisitados a manter um estilo de fala e escrita informal. \cite{opara2025distinguishingaigeneratedhumanwrittentext} propôs um framework que integra análise "estilométrica" com teorias psicolinguísticas.
+
+Este viés estilístico tem implicações diretas para a robustez do detector MGTD. Se os detectores são treinados em grandes volumes de texto de IA que compartilham esse viés "objetivo", eles podem falhar ao encontrar texto de IA que imita a subjetividade humana. Ademais, a falha em domínios OOD é um problema complexo. \citet{kuznetsov-etal-2024-robust} focaram sua pesquisa exatamente nisso, avaliando a robustez e a capacidade de detectores performarem bem em geradores ou domínios semânticos não vistos.
