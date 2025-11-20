@@ -240,3 +240,13 @@ merged_model.save_pretrained(final_dir)
 tokenizer.save_pretrained(final_dir)
 
 print(f"\nSaved inference-ready model to:\n{final_dir}\n")
+
+# === DOCUMENT-LEVEL REPORT ===
+#               precision    recall  f1-score   support
+
+#           AI       0.82      0.80      0.81      2500
+#        human       0.81      0.82      0.81      2500
+
+#     accuracy                           0.81      5000
+#    macro avg       0.81      0.81      0.81      5000
+# weighted avg       0.81      0.81      0.81      5000
