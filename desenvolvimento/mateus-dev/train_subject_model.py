@@ -42,7 +42,7 @@ with open(dev_file_path, "r") as f:
     df_dev = pd.read_csv(f, sep="\t")
 
 
-output_dir = os.path.join(MODEL_DIR, "final_subject_model")
+output_dir = os.path.join(MODEL_DIR, "subject_train")
 os.makedirs(output_dir, exist_ok=True)
 
 label_map = {"OBJ": 0, "SUBJ": 1}

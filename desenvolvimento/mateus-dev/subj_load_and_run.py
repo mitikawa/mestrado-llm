@@ -18,7 +18,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 
 DATA_DIR = os.path.join(ROOT, "dados")
 MODEL_DIR = os.path.join(ROOT, "modelos")
 
-MODEL_PATH = os.path.join(MODEL_DIR, "final_subject_model")
+MODEL_PATH = os.path.join(MODEL_DIR, "subject_train")
 
 DEV_FILE = os.path.join(DATA_DIR, "subj", "dev_en.tsv")
 TEST_FILE = os.path.join(DATA_DIR, "subj", "test_en_labeled.tsv")
