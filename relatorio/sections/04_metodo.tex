@@ -20,9 +20,19 @@ Onde $n$ é o número total de sentenças no documento. O $I_{subj}(D) \in [0, 1
 \subsection{Arquiteturas Avaliadas}
 \label{ssec:arquiteturas}
 
-\subsubsection{BERT-Base}
-\label{ssec:bertbase}
-placeholder
+\subsection{Arquitetura A: BERT-Base com LoRA}
+\label{ssec:metodo_bert}
+
+Nesta primeira arquitetura adotamos o modelo relativamnete simples \textit{bert-base-uncased}. Para otimizar o custo computacional, implementamos a técnica de \textit{Low-Rank Adaptation} (LoRA). Em vez de ajustar todos os milhões de parâmetros do modelo, injetamos matrizes de decomposição de baixo posto nas camadas de atenção, treinando apenas estes adaptadores e a camada de classificação (\textit{classification head}).
+
+Após a conclusão do treinamento, realizamos a operação de \textit{merge} dos pesos dos adaptadores LoRA diretamente nas matrizes do modelo base. Este procedimento resultou em um modelo unificado, contendo tanto o conhecimento pré-treinado quanto o ajuste fino, que foi salvo (incluindo a \textit{classification head}) para as etapas posteriores. O treinamento diferenciou-se para cada tarefa devido às características dos dados:
+
+\begin{itemize}
+    \item \textbf{Tarefa 1 (SD):} O modelo foi treinado no conjunto de treino e validado no conjunto de desenvolvimento. Definimos um total de 5 épocas, ponto onde observou-se o início de \textit{overfitting} (aumento da perda na validação). O modelo parcial foi utilizado junto do conjunto de testes para gerar os resultados do modelo $M_{SD}$.
+    \item \textbf{Tarefa 2 (MGTD):} Dado o volume significativamente maior do \textit{dataset}, o treinamento foi restrito a 1 época completa. Esta decisão foi tomada para equilibrar o tempo de computação com a convergência do modelo. A \textit{evaluation strategy} e \textit{save strategy} foram definidas em termos de 1000 passos devido ao tamanho da época.
+\end{itemize}
+
+Para a etapa crítica de análise, onde as sentenças do dataset de MGTD são classificadas quanto à sua subjetividade, adotamos uma estratégia de treinar uma versão final do modelo de subjetividade utilizando a totalidade dos dados (agregando treino, validação e teste). Mantivemos os mesmos hiperparâmetros (5 épocas, LoRA) para garantir que este modelo responsável por gerar o Índice de Subjetividade ($I_{subj}$) possuísse a máxima capacidade de generalização possível.
 
 \subsubsection{Distilbert}
 \label{ssec:distilbert}
