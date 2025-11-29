@@ -143,7 +143,7 @@ Nesta configuração, utilizamos o modelo \texttt{distilbert-base-uncased} ...
 As Tabelas \ref{tab:distilbert_sd} e \ref{tab:distilbert_mgtd} apresentam os relatórios de classificação detalhados.
 
 % Tabela SD - DistilBERT
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \small
 \caption{Resultados do DistilBERT na Detecção de Subjetividade (NewsSD).}
@@ -163,7 +163,7 @@ Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
 \end{table}
 
 % Tabela MGTD - DistilBERT
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \small
 \caption{Resultados do DistilBERT em MGTD (SemEval-2024).}
@@ -197,10 +197,10 @@ Finalmente, avaliamos o modelo \texttt{roberta-base},...
 
 \subsubsection{Desempenho nas Tarefas Base}
 
-As Tabelas \ref{tab:roberta_sd} e \ref{tab:roberta_mgtd} mostram os resultados.
+O modelo foi avaliado nos conjuntos de teste oficiais. Para a tarefa de subjetividade, utilizamos o \textit{dev set} da Tarefa 1 como teste, e para a detecção de MGT, utilizamos o \textit{test set} oficial da Tarefa 2. As tabelas \ref{tab:roberta_sd} e \ref{tab:roberta_mgtd} detalham o desempenho.
 
-% Tabela SD - RoBERTa
-\begin{table}[h]
+% Tabela SD - RoBERTa (Dados do notebook classif-roberta)
+\begin{table}[H]
 \centering
 \small
 \caption{Resultados do RoBERTa na Detecção de Subjetividade (NewsSD).}
@@ -209,38 +209,106 @@ As Tabelas \ref{tab:roberta_sd} e \ref{tab:roberta_mgtd} mostram os resultados.
 \toprule
 \textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
-Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
-Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
+Objetivo (OBJ)    & 0.70 & 0.86 & 0.77 & 222 \\
+Subjetivo (SUBJ)  & 0.83 & 0.65 & 0.73 & 240 \\
 \midrule
-\textit{Acurácia}     &      &      & 0.00 & 0 \\
-\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.75 & 462 \\
+\textit{Média Macro}  & 0.76 & 0.76 & 0.75 & 462 \\
+\textit{Média Pond.}  & 0.77 & 0.75 & 0.75 & 462 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-% Tabela MGTD - RoBERTa
-\begin{table}[h]
+% Tabela MGTD - RoBERTa (Dados do notebook detec-roberta)
+\begin{table}[H]
 \centering
 \small
-\caption{Resultados do RoBERTa em MGTD (SemEval-2024).}
+\caption{Resultados do RoBERTa em MGTD.}
 \label{tab:roberta_mgtd}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
-Humano  & 0.00 & 0.00 & 0.00 & 0 \\
-Máquina & 0.00 & 0.00 & 0.00 & 0 \\
+Humano  & 0.86 & 0.72 & 0.79 & 16272 \\
+Máquina & 0.78 & 0.90 & 0.84 & 18000 \\
 \midrule
-\textit{Acurácia}     &      &      & 0.00 & 0 \\
-\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.81 & 34272 \\
+\textit{Média Macro}  & 0.82 & 0.81 & 0.81 & 34272 \\
+\textit{Média Pond.}  & 0.82 & 0.81 & 0.81 & 34272 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsubsection{Análise de Viés e Robustez}
 
+Avaliamos o modelo sob duas perspectivas críticas, viés de classificação e impacto da subjetividade.
+
 \paragraph{Viés de Estilo (Q1):} 
+Observando a Tabela \ref{tab:roberta_mgtd}, o RoBERTa demonstra um viés claro em direção à máquina. O \textit{Recall} para textos de máquina é alto (0.90), indicando que o modelo é eficaz em capturar conteúdo sintético. No entanto, a \textit{Precisão} para esta classe é inferior (0.78), o que implica uma taxa considerável de falsos positivos. 
+Isso nos sugere que o modelo tende a classificar textos humanos que possuam características estilísticas rígidas ou genéricas como sendo gerados por IA, penalizando a autoria humana a fim de uma detecção mais abrangente.
+
+Ademais, a Tabela \ref{tab:subj_stats} apresenta a comparação estatística do Índice de Subjetividade Médio ($I_{subj}$) entre os textos de origem humana e sintética no conjunto de teste. A Figura \ref{fig:kde_dist} ilustra visualmente as distribuições de densidade.
+
+\begin{table}[h]
+    \centering
+    \caption{Estatísticas do Índice de Subjetividade ($I_{subj}$) no SemEval.}
+    \label{tab:subj_stats}
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Origem} & \textbf{Média $I_{subj}$} & \textbf{Mediana} \\
+    \midrule
+    Texto Humano & 0.1962 & 0.1456 \\
+    Texto Máquina & 0.1882 & 0.1663 \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+Apesar da média global ser similar, a distribuição dos textos humanos (curva azul) apresenta um pico acentuado na região de extrema objetividade ($I_{subj} < 0.1$), enquanto a distribuição dos textos de máquina é mais dispersa, com maior densidade nas faixas intermediárias de subjetividade. 
+Isso indica que, neste \textit{benchmark} específico, os textos humanos tendem a ser mais factuais e "secos" do que as gerações de IA, invertendo o viés estilístico tradicional onde se espera que a máquina seja a mais neutra.
+
+\begin{figure}[H]
+    \centering
+    
+    \includegraphics[width=1\linewidth]{figures/roberta_hist.png}
+    \caption{Distribuição de densidade das pontuações de subjetividade para textos humanos e de IA.}
+    \label{fig:kde_dist}
+\end{figure}
 
 \paragraph{Robustez à Subjetividade (Q2):} 
+Para investigar se a subjetividade prejudica a detecção, cruzamos as previsões com os scores gerados pelo modelo especialista. O corpus da Tarefa de detecção mostrou-se predominantemente objetivo (média de subjetividade $\approx 0.19$). 
+
+A Figura \ref{fig:roberta_trend} apresenta a coreelação entre a subjetividade e a confiança do detector na classe IA. Diferentemente de modelos menores que tendem a perder confiança em textos subjetivos, a linha de tendência do RoBERTa apresenta-se praticamente plana. Isso indica que, em nível global, o modelo dissociou a característica "subjetividade" da característica "texto de máquina", e manteve sua confiança estável independentemente do teor opinativo do texto.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/roberta_trend_regression.png} 
+    \caption{Correlação entre o Índice de Subjetividade e a Probabilidade de Detecção (RoBERTa).}
+    \label{fig:roberta_trend}
+\end{figure}
+
+A análise de sensibilidade por faixas, apresentada na Figura \ref{fig:roberta_bins}, reforça essa observação sobre a robustez do modelo. O detector mantém métricas de desempenho consistentes (Acurácia $> 80\%$) através dos quartis de subjetividade. Entretanto, nota-se uma maior variância nas faixas de subjetividade mais alta ($I_{subj} > 0.6$), explicada pela escassez de exemplos nesse nível.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/roberta_accuracy_bins.png} 
+    \caption{Desempenho do classificador RoBERTa segmentado por faixas de subjetividade.}
+    \label{fig:roberta_bins}
+\end{figure}
+
+Apesar da estabilidade global, uma análise no subconjunto de alta subjetividade ($I_{subj} > 0.5$, $N=49$) nos revela uma polarização, ilustrado na distribuição de erros na Figura \ref{fig:roberta_boxplot}.
+
+Contra nossa hipótese inicial de que o modelo falharia aleatoriamente, observou-se o seguinte.
+
+\begin{itemize}
+    \item \textbf{Robustez em IA.} Não foram registrados falsos negativos neste subgrupo. Todas as instâncias de texto sintético subjetivo foram corretamente identificadas, sugerindo que a subjetividade não camufla os artefatos estatísticos da geração de linguagem, mas torná-los mais evidentes para o modelo.
+    \item \textbf{Fragilidade em Humanos:} Por outro lado, 16.3\% dos textos humanos altamente subjetivos foram classificados incorretamente como IA. A Figura \ref{fig:roberta_boxplot} demonstra que a cauda da distribuição dos falsos positivos (FP) se estende para as regiões de maior subjetividade.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/roberta_error_boxplot.png} 
+    \caption{Distribuição de subjetividade por tipo de erro.}
+    \label{fig:roberta_boxplot}
+\end{figure}
+
+Concluímos que o RoBERTa é altamente robusto, mas apresenta um viés específico. O modelo parece ter aprendido que uma "opinião forte" é, frequentemente, característica de alucinações ou estilo argumentativo de IA, levando-o a penalizar humanos que escrevem com alto teor de subjetividade.

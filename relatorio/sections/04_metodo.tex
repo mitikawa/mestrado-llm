@@ -20,7 +20,7 @@ Onde $n$ é o número total de sentenças no documento. O $I_{subj}(D) \in [0, 1
 \subsection{Arquiteturas Avaliadas}
 \label{ssec:arquiteturas}
 
-\subsection{Arquitetura A: BERT-Base com LoRA}
+\subsubsection{Arquitetura A: BERT-Base com LoRA}
 \label{ssec:metodo_bert}
 
 Nesta primeira arquitetura adotamos o modelo relativamnete simples \textit{bert-base-uncased}. Para otimizar o custo computacional, implementamos a técnica de \textit{Low-Rank Adaptation} (LoRA). Em vez de ajustar todos os milhões de parâmetros do modelo, injetamos matrizes de decomposição de baixo posto nas camadas de atenção, treinando apenas estes adaptadores e a camada de classificação (\textit{classification head}).
@@ -38,6 +38,15 @@ Para a etapa crítica de análise, onde as sentenças do dataset de MGTD são cl
 \label{ssec:distilbert}
 placeholder
 
-\subsubsection{Roberta}
+\subsubsection{Arquitetura C: RoBERTa}
 \label{ssec:Roberta}
-placeholder
+
+Nesta arquitetura, adotamos o modelo \texttt{roberta-base}, uma variação robusta do BERT otimizada com um pré-treinamento mais extenso e remoção da tarefa de previsão de próxima sentença (NSP). Optamos pela estratégia de ajuste fino completo. Para viabilizar o custo computacional desta abordagem e acelerar o treinamento sem perda de performance, utilizamos a técnica de precisão mista. Adaptamos o fluxo de treinamento para cada tarefa da seguinte forma.
+
+\begin{itemize}
+    \item \textbf{Tarefa 1 (SD):} O treinamento foi monitorado utilizando a métrica F1-Macro no conjunto de validação. Devido à rápida convergência do modelo e à tendência de \textit{overfitting} observada a partir da 4ª época, implementamos a técnica de parada antecipada com paciência de 2 épocas. O \textit{Trainer} foi configurado para carregar automaticamente o melhor modelo ao final do processo, garantindo a máxima capacidade de generalização.
+
+    \item \textbf{Tarefa 2 (MGTD):} Para a tarefa de detecção, realizamos o treinamento completo por uma época apenas, uma vez que o \textit{dataset} é muito grande. Utilizamos uma divisão estratégica dos dados, mantendo o conjunto de teste oficial da SemEval (Gold Labels) estritamente isolado para a avaliação final, evitando vazamento de dados (\textit{data leakage}).
+\end{itemize}
+
+Fizemos uma análise cruzada utilizando o modelo final da Tarefa 1 em modo de inferência para ``anotar'' todo o dataset da Tarefa 2. Cada documento do corpus de detecção recebeu um Score Médio de Subjetividade, agregado a partir das sentenças, permitindo a investigação da correlação entre a subjetividade do texto e os erros de classificação do detector.
