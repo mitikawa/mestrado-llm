@@ -9,3 +9,4 @@ tqdm==4.67.1
 jupyterlab==4.5.0
 matplotlib==3.10.7
 seaborn==0.13.2
+statsmodels==0.14.5

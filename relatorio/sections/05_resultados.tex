@@ -6,7 +6,7 @@ Nesta seção, apresentamos os resultados experimentais divididos por arquitetur
 \subsection{Arquitetura A: BERT-Base (Baseline)}
 \label{ssec:bertbase}
 
-Nesta configuração, utilizamos o modelo \texttt{bert-base-uncased}...
+Nesta configuração, utilizamos o modelo \textit{bert-base-uncased}.
 
 \subsubsection{Desempenho nas Tarefas Base}
 
@@ -16,38 +16,38 @@ As Tabelas \ref{tab:bert_sd} e \ref{tab:bert_mgtd} detalham a performance obtida
 \begin{table}[h]
 \centering
 \small
-\caption{Resultados do BERT-Base na Detecção de Subjetividade (NewsSD).}
+\caption{Resultados do BERT-Base na Tarefa 1 (dados de teste).}
 \label{tab:bert_sd}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
-Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
-Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
+OBJ  & 0.90 & 0.74 & 0.81 & 215 \\
+SUBJ & 0.55 & 0.80 & 0.65 & 85 \\
 \midrule
-\textit{Accuracy}     &      &      & 0.00 & 0 \\
-\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.76 & 300 \\
+\textit{Média Ar.}    & 0.73 & 0.77 & 0.73 & 300 \\
+\textit{Média Ge.} & 0.80 & 0.76 & 0.77 & 300 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-% Tabela MGTD - BERT
+% Tabela MGTD - BER
 \begin{table}[h]
 \centering
 \small
-\caption{Resultados do BERT-Base em MGTD (SemEval-2024).}
+\caption{Resultados do BERT-Base na Tarefa 2 (dados de teste).}
 \label{tab:bert_mgtd}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
-Humano  & 0.00 & 0.00 & 0.00 & 0 \\
-Máquina & 0.00 & 0.00 & 0.00 & 0 \\
+Humano  & 0.95 & 0.43 & 0.59 & 16272 \\
+Máquina & 0.66 & 0.98 & 0.79 & 18000 \\
 \midrule
-\textit{Accuracy}     &      &      & 0.00 & 0 \\
-\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.72 & 34272 \\
+\textit{Média Ar.}    & 0.80 & 0.71 & 0.69 & 34272 \\
+\textit{Média Ge.} & 0.80 & 0.72 & 0.69 & 34272 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -56,9 +56,81 @@ Máquina & 0.00 & 0.00 & 0.00 & 0 \\
 
 A seguir, apresentamos a análise cruzada utilizando o índice de subjetividade gerado pelo BERT-Base.
 
-\paragraph{Viés de Estilo (Q1):} 
+\paragraph{Viés de Estilo (Q1):} A Tabela \ref{tab:bert_bias} mostra a comparação do $I_{subj}$ para dados de teste. A Figura \ref{fig:bert_kde} mostra a distribuição visualmente. Percebe-se a diferença estatística clara.
 
-\paragraph{Robustez à Subjetividade (Q2):} 
+\begin{table}[h]
+\centering
+\small
+\caption{Índice de Subjetividade Médio ($I_{subj}$) calculado pelo BERT-Base.}
+\label{tab:bert_bias}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Origem} & \textbf{Média $I_{subj}$} & \textbf{Desvio Padrão} \\
+\midrule
+Texto Humano    & 0.2874 & 0.1356 \\
+Texto Máquina   & 0.1784 & 0.1204 \\
+\midrule
+\textit{Diferença} & \multicolumn{2}{c}{$p_{valor} = 0.00$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/Fig1_Distribuicao_Subjetividade.png}
+    \caption{Curva de estimativa de densidade de Kernel.}
+    \label{fig:bert_kde}
+\end{figure}
+
+\paragraph{Robustez à Subjetividade (Q2):}
+Para investigar se o detector utiliza a subjetividade como um forte indicador para a classificação, analisamos a correlação entre o índice $I_{subj}$ e a probabilidade de classe positiva (IA). A Figura \ref{fig:bert_corr} apresenta uma regressão logística sobre os dados de teste. A linha de tendência indica que, \textbf{em média}, textos na região de alta objetividade ($I_{subj} < 0.2$) recebem probabilidades elevadas de serem sintéticos. Por outro lado, à medida que o texto incorpora elementos subjetivos, a probabilidade média do detector na classe IA decai continuamente. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/Fig2_Correlacao_Binned.png}
+    \caption{Correlação entre o Índice de Subjetividade e a Probabilidade de Detecção (Classe IA). A linha vermelha indica o ajuste logístico.}
+    \label{fig:bert_corr}
+\end{figure}
+
+A análise de sensibilidade por faixas é apresentada na Figura \ref{fig:bert_perf}. O desempenho do modelo não é uniforme: enquanto o detector atinge métricas altas (F1-Score $> 0.90$) para textos "Muito Objetivos", observa-se uma degradação consistente de performance conforme a subjetividade aumenta. Isso indica que a robustez do modelo é condicional ao estilo do texto.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/Fig3_Desempenho_por_Faixa.png}
+    \caption{Desempenho do classificador (Acurácia e F1-Score) segmentado por quartis de subjetividade.}
+    \label{fig:bert_perf}
+\end{figure}
+
+No entanto, essa degradação global esconde uma assimetria de robustez entre as classes, exposta nas Figuras \ref{fig:bert_ai} e \ref{fig:bert_human}. Observa-se que a taxa de acerto para textos de IA (Recall) permanece próxima de $99\%$ independentemente do nível de subjetividade (Fig. \ref{fig:bert_ai}), indicando que o modelo é extremamente eficaz em capturar artefatos de máquina. 
+
+A queda na performance global (Fig. \ref{fig:bert_perf}) explica-se pela distribuição das classes: a região de alta subjetividade é composta majoritariamente por textos humanos. Como o modelo possui baixa especificidade nesta região — acertando apenas entre $30\%$ a $50\%$ dos humanos objetivos (Fig. \ref{fig:bert_human}) — o peso desses falsos positivos domina a métrica global.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Fig5_Performance_IA_Recall.png}
+        \caption{Taxa de Acerto em IA (Recall).}
+        \label{fig:bert_ai}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Fig6_Performance_Humano_Recall.png}
+        \caption{Taxa de Acerto em Humanos.}
+        \label{fig:bert_human}
+    \end{minipage}
+\end{figure}
+
+Por fim, a Figura \ref{fig:bert_boxplot} mostra o o \textit{boxplot} da distribuição de subjetividade nos acertos e erros do modelo. Observa-se que os Verdadeiros Negativos (TN - Humanos Corretos) possuem a maior média de subjetividade, indicando que a presença de marcas estilísticas pessoais é um fator de proteção contra falsos positivos. Em contrapartida, os Falsos Positivos (FP - Humano $\to$ IA) apresentam uma distribuição deslocada para a esquerda em relação aos TN, sugerindo que humanos com escrita excessivamente técnica entram na zona de risco de classificação.
+
+Entretanto, é notável a presença de numerosos \textit{outliers} de alta subjetividade na classe Verdadeiros Positivos (TP). Isso demonstra que, embora o detector tenha um forte viés para associar objetividade à IA (evidenciado pela concentração da caixa à esquerda), ele retém capacidade de detecção em casos onde a IA gera textos subjetivos.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/Fig4_Analise_Erro_Boxplot.png}
+    \caption{Distribuição de subjetividade por resultado da classificação.}
+    \label{fig:bert_boxplot}
+\end{figure}
 
 
 \subsection{Arquitetura B: DistilBERT}
@@ -78,14 +150,14 @@ As Tabelas \ref{tab:distilbert_sd} e \ref{tab:distilbert_mgtd} apresentam os rel
 \label{tab:distilbert_sd}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
 Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
 Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
 \midrule
-\textit{Accuracy}     &      &      & 0.00 & 0 \\
-\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.00 & 0 \\
+\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -98,14 +170,14 @@ Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
 \label{tab:distilbert_mgtd}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
 Humano  & 0.00 & 0.00 & 0.00 & 0 \\
 Máquina & 0.00 & 0.00 & 0.00 & 0 \\
 \midrule
-\textit{Accuracy}     &      &      & 0.00 & 0 \\
-\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.00 & 0 \\
+\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -135,14 +207,14 @@ As Tabelas \ref{tab:roberta_sd} e \ref{tab:roberta_mgtd} mostram os resultados.
 \label{tab:roberta_sd}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
 Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
 Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
 \midrule
-\textit{Accuracy}     &      &      & 0.00 & 0 \\
-\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.00 & 0 \\
+\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -155,14 +227,14 @@ Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
 \label{tab:roberta_mgtd}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
 \midrule
 Humano  & 0.00 & 0.00 & 0.00 & 0 \\
 Máquina & 0.00 & 0.00 & 0.00 & 0 \\
 \midrule
-\textit{Accuracy}     &      &      & 0.00 & 0 \\
-\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Acurácia}     &      &      & 0.00 & 0 \\
+\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
