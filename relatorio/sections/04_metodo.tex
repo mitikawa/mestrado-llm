@@ -1,4 +1,33 @@
 \section{Metodologia}
 \label{sec:metodo}
 
-Placeholder metodo
+Para investigar a interseção entre subjetividade e detecção de autoria, propomos um \textit{framework} experimental composto por três etapas sequenciais: (1) Treinamento supervisionado de modelos de SD ($M_{SD}$); (2) Treinamento supervisionado de modelos de MGTD ($M_{MGTD}$); e (3) Inferência cruzada e análise de correlação através de um Índice de Subjetividade agregado. A fim de garantir a robustez das observações e mitigar vieses de uma arquitetura específica, este experimento foi replicado utilizando três arquiteturas de base distintas, variando em tamanho e estratégia de pré-treinamento.
+
+\subsection{Estratégia de Agregação e Índice de Subjetividade}
+\label{ssec:agregacao}
+
+Conforme discutido na Seção \ref{ssec:granularidade}, existe uma discrepância de granularidade entre os modelos. Para correlacionar as tarefas, formalizamos o seguinte processo de inferência em dois estágios:
+
+Seja $D$ um documento do \textit{dataset} de MGTD. Primeiramente, aplicamos uma segmentação de sentenças $S_{seg}$, tal que $D = \{s_1, s_2, ..., s_n\}$.
+O modelo de subjetividade $M_{SD}$ processa cada sentença $s_i$, resultando em uma probabilidade de subjetividade $P(subj|s_i)$. Definimos a função indicadora de classe $C(s_i)$ e o índice de subjetividade do documento $I_{subj}(D)$ como:
+
+\begin{equation}
+    I_{subj}(D) = \frac{1}{n} \sum_{i=1}^{n} P(subj | s_i)
+\end{equation}
+
+Onde $n$ é o número total de sentenças no documento. O $I_{subj}(D) \in [0, 1]$ representa a densidade média de subjetividade do documento.
+
+\subsection{Arquiteturas Avaliadas}
+\label{ssec:arquiteturas}
+
+\subsubsection{BERT-Base}
+\label{ssec:bertbase}
+placeholder
+
+\subsubsection{Distilbert}
+\label{ssec:distilbert}
+placeholder
+
+\subsubsection{Roberta}
+\label{ssec:Roberta}
+placeholder

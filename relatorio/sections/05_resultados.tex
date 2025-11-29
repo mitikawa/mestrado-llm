@@ -1,4 +1,174 @@
 \section{Resultados}
 \label{sec:resultados}
 
-Placeholder resultados
+Nesta seção, apresentamos os resultados experimentais divididos por arquitetura. Iniciamos com o modelo base (BERT) para estabelecer uma linha de base, seguido pelas variações de arquitetura (destilada e otimizada). Cada subseção detalha o desempenho nas tarefas de Detecção de Subjetividade (SD) e MGTD, concluindo com a análise de viés e robustez.
+
+\subsection{Arquitetura A: BERT-Base (Baseline)}
+\label{ssec:bertbase}
+
+Nesta configuração, utilizamos o modelo \texttt{bert-base-uncased}...
+
+\subsubsection{Desempenho nas Tarefas Base}
+
+As Tabelas \ref{tab:bert_sd} e \ref{tab:bert_mgtd} detalham a performance obtida.
+
+% Tabela SD - BERT
+\begin{table}[h]
+\centering
+\small
+\caption{Resultados do BERT-Base na Detecção de Subjetividade (NewsSD).}
+\label{tab:bert_sd}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\midrule
+Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
+Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
+\midrule
+\textit{Accuracy}     &      &      & 0.00 & 0 \\
+\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Tabela MGTD - BERT
+\begin{table}[h]
+\centering
+\small
+\caption{Resultados do BERT-Base em MGTD (SemEval-2024).}
+\label{tab:bert_mgtd}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\midrule
+Humano  & 0.00 & 0.00 & 0.00 & 0 \\
+Máquina & 0.00 & 0.00 & 0.00 & 0 \\
+\midrule
+\textit{Accuracy}     &      &      & 0.00 & 0 \\
+\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Análise de Viés e Robustez}
+
+A seguir, apresentamos a análise cruzada utilizando o índice de subjetividade gerado pelo BERT-Base.
+
+\paragraph{Viés de Estilo (Q1):} 
+
+\paragraph{Robustez à Subjetividade (Q2):} 
+
+
+\subsection{Arquitetura B: DistilBERT}
+\label{ssec:distilbert}
+
+Nesta configuração, utilizamos o modelo \texttt{distilbert-base-uncased} ...
+
+\subsubsection{Desempenho nas Tarefas Base}
+
+As Tabelas \ref{tab:distilbert_sd} e \ref{tab:distilbert_mgtd} apresentam os relatórios de classificação detalhados.
+
+% Tabela SD - DistilBERT
+\begin{table}[h]
+\centering
+\small
+\caption{Resultados do DistilBERT na Detecção de Subjetividade (NewsSD).}
+\label{tab:distilbert_sd}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\midrule
+Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
+Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
+\midrule
+\textit{Accuracy}     &      &      & 0.00 & 0 \\
+\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Tabela MGTD - DistilBERT
+\begin{table}[h]
+\centering
+\small
+\caption{Resultados do DistilBERT em MGTD (SemEval-2024).}
+\label{tab:distilbert_mgtd}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\midrule
+Humano  & 0.00 & 0.00 & 0.00 & 0 \\
+Máquina & 0.00 & 0.00 & 0.00 & 0 \\
+\midrule
+\textit{Accuracy}     &      &      & 0.00 & 0 \\
+\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Análise de Viés e Robustez}
+
+\paragraph{Viés de Estilo (Q1):} 
+
+
+\paragraph{Robustez à Subjetividade (Q2):} 
+
+
+\subsection{Arquitetura C: RoBERTa}
+\label{ssec:roberta}
+
+Finalmente, avaliamos o modelo \texttt{roberta-base},...
+
+\subsubsection{Desempenho nas Tarefas Base}
+
+As Tabelas \ref{tab:roberta_sd} e \ref{tab:roberta_mgtd} mostram os resultados.
+
+% Tabela SD - RoBERTa
+\begin{table}[h]
+\centering
+\small
+\caption{Resultados do RoBERTa na Detecção de Subjetividade (NewsSD).}
+\label{tab:roberta_sd}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\midrule
+Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
+Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
+\midrule
+\textit{Accuracy}     &      &      & 0.00 & 0 \\
+\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Tabela MGTD - RoBERTa
+\begin{table}[h]
+\centering
+\small
+\caption{Resultados do RoBERTa em MGTD (SemEval-2024).}
+\label{tab:roberta_mgtd}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Classe} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
+\midrule
+Humano  & 0.00 & 0.00 & 0.00 & 0 \\
+Máquina & 0.00 & 0.00 & 0.00 & 0 \\
+\midrule
+\textit{Accuracy}     &      &      & 0.00 & 0 \\
+\textit{Macro Avg}    & 0.00 & 0.00 & 0.00 & 0 \\
+\textit{Weighted Avg} & 0.00 & 0.00 & 0.00 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Análise de Viés e Robustez}
+
+\paragraph{Viés de Estilo (Q1):} 
+
+\paragraph{Robustez à Subjetividade (Q2):} 

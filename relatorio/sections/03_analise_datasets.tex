@@ -48,6 +48,6 @@ Os dados são fornecidos em formato JSONL, divididos nas partições de treino e
 
 Uma observação fundamental é a disparidade na granularidade dos dados entre as duas tarefas. A Tarefa 1 (SD) opera em \textbf{nível de sentença}. Em contrapartida, a Tarefa 2 (MGTD) opera em \textbf{nível de documento}, onde cada instância (\texttt{text}) consiste em múltiplos parágrafos.
 
-Esta discrepância não permite uma comparação direta e constitui um desafio metodológico central. Não podemos aplicar diretamente o classificador $M_{MGTD}$ (treinado em documentos) a uma sentença, nem aplicar o $M_{SD}$ (treinado em sentenças) diretamente a um documento $D_{MGTD}$.
+Esta discrepância dificulta uma comparação direta e constitui um desafio metodológico central. Aplicar diretamente o classificador $M_{MGTD}$ (treinado em documentos) a uma sentença, ou aplicar o $M_{SD}$ (treinado em sentenças) diretamente a um documento $D_{MGTD}$, levaria a uma perda de performance.
 
 Para superar este desafio, a nossa metodologia (detalhada na Secção \ref{sec:metodo}) emprega uma \textbf{estratégia de agregação}, onde o classificador $M_{CS}$ é aplicado iterativamente às sentenças de um documento $D_{MGTD}$ para calcular um "Índice de Subjetividade" agregado.
