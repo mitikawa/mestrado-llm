@@ -50,4 +50,4 @@ Uma observação fundamental é a disparidade na granularidade dos dados entre a
 
 Esta discrepância dificulta uma comparação direta e constitui um desafio metodológico central. Aplicar diretamente o classificador $M_{MGTD}$ (treinado em documentos) a uma sentença, ou aplicar o $M_{SD}$ (treinado em sentenças) diretamente a um documento $D_{MGTD}$, levaria a uma perda de performance.
 
-Para superar este desafio, a nossa metodologia (detalhada na Secção \ref{sec:metodo}) emprega uma \textbf{estratégia de agregação}, onde o classificador $M_{CS}$ é aplicado iterativamente às sentenças de um documento $D_{MGTD}$ para calcular um "Índice de Subjetividade" agregado.
+Para superar este desafio, a nossa metodologia (detalhada na Secção \ref{sec:metodo}) emprega uma \textbf{estratégia de agregação}, onde o classificador $M_{SD}$ é aplicado iterativamente às sentenças de um documento $D_{MGTD}$ para calcular um "Índice de Subjetividade" agregado.
