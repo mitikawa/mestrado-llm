@@ -1,4 +1,12 @@
 \section{Conclusão}
 \label{sec:conclusao}
 
-Placeholder conclusao
+Este trabalho investigou a relação entre a subjetividade linguística e a detecção de textos gerados por LLMs. Buscou-se entender se o estilo subjetivo confunde os detectores automáticos e, assim, a análise cruzada com três arquiteturas diferentes trouxe resultados que contestam ideias anteriores da área.
+
+Quanto ao viés de estilo, confirmou-se estatisticamente que textos humanos são mais subjetivos que os sintéticos nos domínios avaliados. As análises mostraram que a produção das IAs foca em faixas de subjetividade baixa ou média. Isso confirma a hipótese de que modelos ajustados por instrução preferem uma linguagem mais neutra e factual.
+
+Sobre a robustez, notou-se uma polarização no desempenho. Geralmente, textos mais subjetivos são classificados como humanos com maior confiança. Contudo, a análise de erros revelou um problema crítico. Os modelos detectam bem IAs subjetivas, o que sugere que a subjetividade acentua artefatos sintéticos. Por outro lado, eles falham ao distinguir humanos muito subjetivos e os classificam erroneamente como máquinas.
+
+O modelo RoBERTa destacou-se pela maior robustez global e manteve a confiança mais estável que os outros comparados. Mesmo assim, ele também confundiu opiniões fortes com alucinações em textos humanos extremos.
+
+Conclui-se que a subjetividade é essencial para detectar textos gerados por máquina. Os detectores atuais parecem penalizar textos que fogem da objetividade padrão. Futuros trabalhos devem focar em calibrar os modelos para separar o estilo da origem do texto. Isso evitará que textos humanos opinativos ou criativos sejam sinalizados injustamente como artificiais.
