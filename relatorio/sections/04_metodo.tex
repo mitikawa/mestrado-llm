@@ -41,7 +41,7 @@ Para a realização das Tarefas 1 e 2 — detecção de subjetividade em senten�
 
 \subsubsection{Distilbert para a Tarefa 1 (SD)}
 
-Nessa tarefa, optou-se pela utilização do \textit{distilbert/distilbert-base-uncased} \cite{sanh2020distilbertdistilledversionbert}. O DistilBERT é uma versão destilada do BERT, que possui o número de parâmetros significamente reduzido e mantendo bastante de seu desempenho em relação ao modelo original em tarefas de compreensão de linguagem natural. Essa compactação é obtida por meio do processo de \textit{knowledge distillation}, em que um modelo estudado (teacher) transfere seu comportamento para um modelo estudado mais leve (student).
+Nessa tarefa, optou-se pela utilização do \textit{distilbert/distilbert-base-uncased} \cite{sanh2020distilbertdistilledversionbert}. O DistilBERT é uma versão destilada do BERT, que possui o número de parâmetros significamente reduzido e mantendo bastante de seu desempenho em relação ao modelo original em tarefas de compreensão de linguagem natural. Essa compactação é obtida por meio do processo de \textit{knowledge distillation}, em que um modelo estudado (\textit{teacher}) transfere seu comportamento para um modelo estudado mais leve (\textit{student}).
 
 O modelo foi treinado no conjunto de treino e validado no conjunto de desenvolvimento. Foi definido um total de 3 épocas, e foi realizada uma  variação na função de perda para contemplar o balanceamento de categorias. Foram associados pesos às classes, que foram considerados escalonamente na perda.
 
