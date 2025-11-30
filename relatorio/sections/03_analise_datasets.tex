@@ -30,11 +30,11 @@ Teste & 4 & 219 & 106 (4) & 113 (16) \\
 
 A análise da Tabela \ref{tab:stats_newssd} revela duas observações metodologicamente críticas que informam o nosso desenho experimental (Secção \ref{sec:metodo}):
 \begin{enumerate}
-    \item \textbf{Tamanho do Dataset:} O conjunto de treino é notavelmente reduzido (n=731). Esta escassez de dados impõe um risco significativo de \textit{overfitting} para LLMs submetidos a \textit{fine-tuning} completo.
+    \item \textbf{Tamanho do \textit{Dataset}:} O conjunto de treino é notavelmente reduzido (n=731). Esta escassez de dados impõe um risco significativo de \textit{overfitting} para LLMs submetidos a \textit{fine-tuning} completo.
     \item \textbf{Desbalanceamento de Classes:} O conjunto de treino exibe um desbalanceamento considerável (proporção de aprox. 2:1) em favor da classe objetiva (\texttt{OBJ}).
 \end{enumerate}
 
-Ambos os fatores justificam a adoção de uma abordagem de \textit{Parameter-Efficient Fine-Tuning} (PEFT), como o LoRA, e a utilização de estratégias de mitigação de desbalanceamento, como a ponderação de classes na função de perda (\textit{weighted loss}).
+Ambos os fatores justificam a adoção de uma abordagem de \textit{Parameter-Efficient Fine-Tuning} (PEFT), como o LoRA\cite{hu2021loralowrankadaptationlarge}, e a utilização de estratégias de mitigação de desbalanceamento, como a ponderação de classes na função de perda (\textit{weighted loss}).
 
 \subsection{Tarefa 2}
 \label{ssec:dataset_mgtd}
@@ -48,6 +48,6 @@ Os dados são fornecidos em formato JSONL, divididos nas partições de treino e
 
 Uma observação fundamental é a disparidade na granularidade dos dados entre as duas tarefas. A Tarefa 1 (SD) opera em \textbf{nível de sentença}. Em contrapartida, a Tarefa 2 (MGTD) opera em \textbf{nível de documento}, onde cada instância (\texttt{text}) consiste em múltiplos parágrafos.
 
-Esta discrepância dificulta uma comparação direta e constitui um desafio metodológico central. Aplicar diretamente o classificador $M_{MGTD}$ (treinado em documentos) a uma sentença, ou aplicar o $M_{SD}$ (treinado em sentenças) diretamente a um documento $D_{MGTD}$, levaria a uma perda de performance.
+Esta discrepância dificulta uma comparação direta e constitui um desafio metodológico importante. Aplicar diretamente o classificador $M_{MGTD}$ (treinado em documentos) a uma sentença, ou aplicar o $M_{SD}$ (treinado em sentenças) diretamente a um documento $D_{MGTD}$, levaria a uma perda de performance.
 
-Para superar este desafio, a nossa metodologia (detalhada na Secção \ref{sec:metodo}) emprega uma \textbf{estratégia de agregação}, onde o classificador $M_{SD}$ é aplicado iterativamente às sentenças de um documento $D_{MGTD}$ para calcular um "Índice de Subjetividade" agregado.
+Para superar este desafio, a nossa metodologia (detalhada na Secção \ref{sec:metodo}) emprega uma \textbf{estratégia de agregação}, onde o classificador $M_{SD}$ é aplicado iterativamente às sentenças de um documento $D_{MGTD}$ para calcular um \textbf{Índice de Subjetividade} agregado.

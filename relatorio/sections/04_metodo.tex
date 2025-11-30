@@ -19,11 +19,12 @@ Onde $n$ é o número total de sentenças no documento. O $I_{subj}(D) \in [0, 1
 
 \subsection{Arquiteturas Avaliadas}
 \label{ssec:arquiteturas}
+Nesta seção, serão detalhadas as arquiteturas escolhidas, variações realizadas, para cada combinação de tarefa e modelo.
 
 \subsubsection{Arquitetura A: BERT-Base com LoRA}
 \label{ssec:metodo_bert}
 
-Nesta primeira arquitetura adotamos o modelo relativamnete simples \textit{bert-base-uncased}. Para otimizar o custo computacional, implementamos a técnica de \textit{Low-Rank Adaptation} (LoRA). Em vez de ajustar todos os milhões de parâmetros do modelo, injetamos matrizes de decomposição de baixo posto nas camadas de atenção, treinando apenas estes adaptadores e a camada de classificação (\textit{classification head}).
+Nesta primeira arquitetura adotamos o modelo relativamente simples \textit{bert-base-uncased}. Para otimizar o custo computacional, implementamos a técnica de \textit{Low-Rank Adaptation} (LoRA). Em vez de ajustar todos os milhões de parâmetros do modelo, injetamos matrizes de decomposição de baixo posto nas camadas de atenção, treinando apenas estes adaptadores e a camada de classificação (\textit{classification head}).
 
 Após a conclusão do treinamento, realizamos a operação de \textit{merge} dos pesos dos adaptadores LoRA diretamente nas matrizes do modelo base. Este procedimento resultou em um modelo unificado, contendo tanto o conhecimento pré-treinado quanto o ajuste fino, que foi salvo (incluindo a \textit{classification head}) para as etapas posteriores. O treinamento diferenciou-se para cada tarefa devido às características dos dados:
 
@@ -34,19 +35,43 @@ Após a conclusão do treinamento, realizamos a operação de \textit{merge} dos
 
 Para a etapa crítica de análise, onde as sentenças do dataset de MGTD são classificadas quanto à sua subjetividade, adotamos uma estratégia de treinar uma versão final do modelo de subjetividade utilizando a totalidade dos dados (agregando treino, validação e teste). Mantivemos os mesmos hiperparâmetros (5 épocas, LoRA) para garantir que este modelo responsável por gerar o Índice de Subjetividade ($I_{subj}$) possuísse a máxima capacidade de generalização possível.
 
-\subsubsection{Distilbert}
-\label{ssec:distilbert}
-placeholder
+\subsubsection{Arquitetura B: DistilBERT e DeBERTa}
+
+Para a realização das Tarefas 1 e 2 — detecção de subjetividade em sentenças e detecção de texto gerado por máquina (MGTD), respectivamente — foram selecionados dois modelos distintos. A escolha por arquiteturas diferentes buscou promover variação metodológica, possibilitando a análise comparativa de desempenho entre modelos de portes e capacidades distintas, além de permitir avaliar o impacto da complexidade do modelo sobre tarefas com diferentes níveis de dificuldade e escalas de dados.
+
+\subsubsection{Distilbert para a Tarefa 1 (SD)}
+
+Nessa tarefa, optou-se pela utilização do \textit{distilbert/distilbert-base-uncased} \cite{sanh2020distilbertdistilledversionbert}. O DistilBERT é uma versão destilada do BERT, que possui o número de parâmetros significamente reduzido e mantendo bastante de seu desempenho em relação ao modelo original em tarefas de compreensão de linguagem natural. Essa compactação é obtida por meio do processo de \textit{knowledge distillation}, em que um modelo estudado (teacher) transfere seu comportamento para um modelo estudado mais leve (student).
+
+O modelo foi treinado no conjunto de treino e validado no conjunto de desenvolvimento. Foi definido um total de 3 épocas, e foi realizada uma  variação na função de perda para contemplar o balanceamento de categorias. Foram associados pesos às classes, que foram considerados escalonamente na perda.
+
+
+\subsubsection{DeBERTa para a Tarefa 2 (MGTD)}
+
+Para a Tarefa 2, optou-se pela arquitetura \textit{microsoft/deberta-v3-base} \cite{he2021debertadecodingenhancedbertdisentangled}, enriquecida com técnica de \textit{parameter-efficient fine-tuning} via LoRA (\textit{Low-Rank Adaptation}). A DeBERTa propôs a introdução de melhorias estruturais em relação ao BERT tradicional, como:
+
+\begin{itemize}
+    \item \textbf{Mecanismo de atenção desmembrado} (\textit{disentangled attention}), que separa informações relativas à posição e ao conteúdo lexical, melhorando a capacidade de comparação entre tokens.
+    \item \textbf{Máscara de decodificação aprimorada} (\textit{enhanced mask decoder}), facilitando a modelagem contextual durante o pré-treino.
+\end{itemize}
+
+A escolha da DeBERTa para a Tarefa 2 foi motivada pelo aumento da complexidade da tarefa em relação à anterior: as entradas tem tamanho muito grande, e as amostras possuem textos com muitas sentenças. Foi julgado que um modelo maior poderia capturar melhor nuances caracterizados por um problema mais complexo.
+Dessa forma, a DeBERTa com LoRA também foi treinada utilizando apenas uma época
+
+
+
 
 \subsubsection{Arquitetura C: RoBERTa}
 \label{ssec:Roberta}
 
-Nesta arquitetura, adotamos o modelo \texttt{roberta-base}, uma variação robusta do BERT otimizada com um pré-treinamento mais extenso e remoção da tarefa de previsão de próxima sentença (NSP). Optamos pela estratégia de ajuste fino completo. Para viabilizar o custo computacional desta abordagem e acelerar o treinamento sem perda de performance, utilizamos a técnica de precisão mista. Adaptamos o fluxo de treinamento para cada tarefa da seguinte forma.
+A escolha da arquitetura \textit{roberta-base} \cite{liu2019roberta} justifica-se pela necessidade de mitigar limitações do BERT original através de três otimizações críticas para este estudo, isto é, a implementação de mascaramento dinâmico, que atua como \textit{data augmentation} implícito para reduzir o risco de \textit{overfitting} no corpus restrito da Tarefa 1; o pré-treinamento em um volume de dados superior, que melhora a identificação de padrões sutis típicos de textos gerados por IA; e a remoção da tarefa de \textit{Next Sentence Prediction} (NSP), permitindo que o modelo foque mais em representações contextuais profundas, alinhando-se diretamente aos objetivos de classificação de subjetividade e autoria.
+
+Optamos pela estratégia de ajuste fino completo. Para viabilizar o custo computacional desta abordagem e acelerar o treinamento sem perda de performance, utilizamos a técnica de precisão mista. Adaptamos o fluxo de treinamento para cada tarefa da seguinte forma.
 
 \begin{itemize}
     \item \textbf{Tarefa 1 (SD):} O treinamento foi monitorado utilizando a métrica F1-Macro no conjunto de validação. Devido à rápida convergência do modelo e à tendência de \textit{overfitting} observada a partir da 4ª época, implementamos a técnica de parada antecipada com paciência de 2 épocas. O \textit{Trainer} foi configurado para carregar automaticamente o melhor modelo ao final do processo, garantindo a máxima capacidade de generalização.
 
-    \item \textbf{Tarefa 2 (MGTD):} Para a tarefa de detecção, realizamos o treinamento completo por uma época apenas, uma vez que o \textit{dataset} é muito grande. Utilizamos uma divisão estratégica dos dados, mantendo o conjunto de teste oficial da SemEval (Gold Labels) estritamente isolado para a avaliação final, evitando vazamento de dados (\textit{data leakage}).
+    \item \textbf{Tarefa 2 (MGTD):} Para a tarefa de detecção, realizamos o treinamento completo por uma época apenas, uma vez que o \textit{dataset} é muito grande. Utilizamos uma divisão estratégica dos dados, mantendo o conjunto de teste oficial da SemEval (\textit{Gold Labels}) estritamente isolado para a avaliação final, evitando vazamento de dados (\textit{data leakage}).
 \end{itemize}
 
 Fizemos uma análise cruzada utilizando o modelo final da Tarefa 1 em modo de inferência para ``anotar'' todo o dataset da Tarefa 2. Cada documento do corpus de detecção recebeu um Score Médio de Subjetividade, agregado a partir das sentenças, permitindo a investigação da correlação entre a subjetividade do texto e os erros de classificação do detector.

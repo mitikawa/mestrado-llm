@@ -3,62 +3,93 @@
 
 Nesta seção, apresentamos os resultados experimentais divididos por arquitetura. Iniciamos com o modelo base (BERT) para estabelecer uma linha de base, seguido pelas variações de arquitetura (destilada e otimizada). Cada subseção detalha o desempenho nas tarefas de Detecção de Subjetividade (SD) e MGTD, concluindo com a análise de viés e robustez.
 
-\subsection{Arquitetura A: BERT-Base (Baseline)}
+\subsection{Comparação geral de desempenho nas tarefas base}
+As tabelas \ref{tab:all_sd} e \ref{tab:all_mgtd} detalham a performance obtida por cada arquitetura em cada uma das duas tarefas. É necessário pontuar que todas as arquiteturas utilizaram os dados de teste oferecidos pelas respectivas tarefas para medir o desempenho de forma justa.
+%\newpage
+%Tabela SD
+\begin{table}[htbp]
+\centering
+\small
+\caption{Desempenho dos modelos na tarefa de detecção de subjetividade (NewsSD)}
+\label{tab:all_sd}
+\begin{tabular}{p{1.4cm} p{0.8cm} c c c}
+\toprule
+\textbf{Modelo} & \textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} \\
+\midrule
+
+\textbf{BERT} & OBJ & 0.90 & 0.74 & 0.81 \\
+              & SUBJ & 0.55 & 0.80 & 0.65 \\
+              & \textit{Acurácia}  &  &  & 0.76 \\
+              & \textit{Média Ar.} & 0.73 & 0.77 & 0.73 \\
+              & \textit{Média Ge.} & 0.80 & 0.76 & 0.77 \\
+\midrule
+
+\textbf{DistilBERT} & OBJ & 0.85 & 0.78 & 0.81 \\
+                    & SUBJ & 0.54 & 0.66 & 0.59 \\
+                    & \textit{Acurácia}  &  &  & 0.74 \\
+                    & \textit{Média Ar.} & 0.70 & 0.72 & 0.70 \\
+                    & \textit{Média Ge.} & 0.76 & 0.74 & 0.75 \\
+\midrule
+
+\textbf{RoBERTa} & OBJ & 0.70 & 0.86 & 0.77 \\
+                 & SUBJ & 0.83 & 0.65 & 0.73 \\
+                 & \textit{Acurácia}      &  &  & 0.75 \\
+                 & \textit{Média Ar.}   & 0.76 & 0.76 & 0.75 \\
+                 & \textit{Média Ge.}   & 0.77 & 0.75 & 0.75 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%Tabela MGTD
+\begin{table}[ht]
+\centering
+\small
+\caption{Desempenho dos modelos na tarefa de MGTD}
+\label{tab:all_mgtd}
+\begin{tabular}{p{1.4cm} p{0.8cm} c c c}
+\toprule
+\textbf{Modelo} & \textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} \\
+\midrule
+
+% =============== BERT ===============
+\textbf{BERT} & Humano  & 0.95 & 0.43 & 0.59 \\
+& Máquina & 0.66 & 0.98 & 0.79 \\
+& \textit{Acurácia}     &  &  & 0.72 \\
+& \textit{Média Ar.}    & 0.80 & 0.71 & 0.69 \\
+& \textit{Média Ge.}    & 0.80 & 0.72 & 0.69 \\
+\midrule
+
+% =============== DEBERTA ===============
+\textbf{DeBERTa} & Humano  & 0.81 & 0.69 & 0.75 \\
+& Máquina & 0.73 & 0.84 & 0.78 \\
+& \textit{Acurácia}     &  &  & 0.77 \\
+& \textit{Média Ar.}  & 0.77 & 0.77 & 0.77 \\
+& \textit{Média Ge.}  & 0.77 & 0.77 & 0.77 \\
+\midrule
+
+% =============== ROBERTA ===============
+\textbf{RoBERTa} & Humano  & 0.86 & 0.72 & 0.79 \\
+& Máquina & 0.78 & 0.90 & 0.84 \\
+& \textit{Acurácia} &  &  & 0.81 \\
+& \textit{Média Ar.}   & 0.82 & 0.81 & 0.81 \\
+& \textit{Média Ge.}   & 0.82 & 0.81 & 0.81 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsection{Análise de Viés e Robustez}
+\label{ssec:analysis}
+
+\subsubsection{Arquitetura A: BERT-Base (Baseline)}
 \label{ssec:bertbase}
-
-Nesta configuração, utilizamos o modelo \textit{bert-base-uncased}.
-
-\subsubsection{Desempenho nas Tarefas Base}
-
-As Tabelas \ref{tab:bert_sd} e \ref{tab:bert_mgtd} detalham a performance obtida.
-
-% Tabela SD - BERT
-\begin{table}[h]
-\centering
-\small
-\caption{Resultados do BERT-Base na Tarefa 1 (dados de teste).}
-\label{tab:bert_sd}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
-\midrule
-OBJ  & 0.90 & 0.74 & 0.81 & 215 \\
-SUBJ & 0.55 & 0.80 & 0.65 & 85 \\
-\midrule
-\textit{Acurácia}     &      &      & 0.76 & 300 \\
-\textit{Média Ar.}    & 0.73 & 0.77 & 0.73 & 300 \\
-\textit{Média Ge.} & 0.80 & 0.76 & 0.77 & 300 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-% Tabela MGTD - BER
-\begin{table}[h]
-\centering
-\small
-\caption{Resultados do BERT-Base na Tarefa 2 (dados de teste).}
-\label{tab:bert_mgtd}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
-\midrule
-Humano  & 0.95 & 0.43 & 0.59 & 16272 \\
-Máquina & 0.66 & 0.98 & 0.79 & 18000 \\
-\midrule
-\textit{Acurácia}     &      &      & 0.72 & 34272 \\
-\textit{Média Ar.}    & 0.80 & 0.71 & 0.69 & 34272 \\
-\textit{Média Ge.} & 0.80 & 0.72 & 0.69 & 34272 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsubsection{Análise de Viés e Robustez}
 
 A seguir, apresentamos a análise cruzada utilizando o índice de subjetividade gerado pelo BERT-Base.
 
 \paragraph{Viés de Estilo (Q1):} A Tabela \ref{tab:bert_bias} mostra a comparação do $I_{subj}$ para dados de teste. A Figura \ref{fig:bert_kde} mostra a distribuição visualmente. Percebe-se a diferença estatística clara.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \small
 \caption{Índice de Subjetividade Médio ($I_{subj}$) calculado pelo BERT-Base.}
@@ -75,29 +106,29 @@ Texto Máquina   & 0.1784 & 0.1204 \\
 \end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=1\linewidth]{figures/Fig1_Distribuicao_Subjetividade.png}
-    \caption{Curva de estimativa de densidade de Kernel.}
+    \caption{Curva de estimativa de densidade de Kernel do modelo  BERT-Base.}
     \label{fig:bert_kde}
 \end{figure}
 
 \paragraph{Robustez à Subjetividade (Q2):}
 Para investigar se o detector utiliza a subjetividade como um forte indicador para a classificação, analisamos a correlação entre o índice $I_{subj}$ e a probabilidade de classe positiva (IA). A Figura \ref{fig:bert_corr} apresenta uma regressão logística sobre os dados de teste. A linha de tendência indica que, \textbf{em média}, textos na região de alta objetividade ($I_{subj} < 0.2$) recebem probabilidades elevadas de serem sintéticos. Por outro lado, à medida que o texto incorpora elementos subjetivos, a probabilidade média do detector na classe IA decai continuamente. 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figures/Fig2_Correlacao_Binned.png}
-    \caption{Correlação entre o Índice de Subjetividade e a Probabilidade de Detecção (Classe IA). A linha vermelha indica o ajuste logístico.}
+    \caption{Correlação entre o Índice de Subjetividade e a Probabilidade de Detecção (Classe IA) para o modelo BERT-Base. A linha vermelha indica o ajuste logístico.}
     \label{fig:bert_corr}
 \end{figure}
 
-A análise de sensibilidade por faixas é apresentada na Figura \ref{fig:bert_perf}. O desempenho do modelo não é uniforme: enquanto o detector atinge métricas altas (F1-Score $> 0.90$) para textos "Muito Objetivos", observa-se uma degradação consistente de performance conforme a subjetividade aumenta. Isso indica que a robustez do modelo é condicional ao estilo do texto.
+A análise de sensibilidade por faixas é apresentada na Figura \ref{fig:bert_perf}. O desempenho do modelo não é uniforme: enquanto o detector atinge métricas altas (F1-Score $> 0.90$) para textos ``Muito Objetivos'', observa-se uma degradação consistente de performance conforme a subjetividade aumenta. Isso indica que a robustez do modelo é condicional ao estilo do texto.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figures/Fig3_Desempenho_por_Faixa.png}
-    \caption{Desempenho do classificador (Acurácia e F1-Score) segmentado por quartis de subjetividade.}
+    \caption{Desempenho do classificador (Acurácia e F1-Score) segmentado por quartis de subjetividade (BERT-Base).}
     \label{fig:bert_perf}
 \end{figure}
 
@@ -105,96 +136,93 @@ No entanto, essa degradação global esconde uma assimetria de robustez entre as
 
 A queda na performance global (Fig. \ref{fig:bert_perf}) explica-se pela distribuição das classes: a região de alta subjetividade é composta majoritariamente por textos humanos. Como o modelo possui baixa especificidade nesta região — acertando apenas entre $30\%$ a $50\%$ dos humanos objetivos (Fig. \ref{fig:bert_human}) — o peso desses falsos positivos domina a métrica global.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/Fig5_Performance_IA_Recall.png}
-        \caption{Taxa de Acerto em IA (Recall).}
+        \caption{Taxa de Acerto em IA (BERT-Base).}
         \label{fig:bert_ai}
     \end{minipage}\hfill
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/Fig6_Performance_Humano_Recall.png}
-        \caption{Taxa de Acerto em Humanos.}
+        \caption{Taxa de Acerto em Humanos (BERT-Base).}
         \label{fig:bert_human}
     \end{minipage}
 \end{figure}
 
-Por fim, a Figura \ref{fig:bert_boxplot} mostra o o \textit{boxplot} da distribuição de subjetividade nos acertos e erros do modelo. Observa-se que os Verdadeiros Negativos (TN - Humanos Corretos) possuem a maior média de subjetividade, indicando que a presença de marcas estilísticas pessoais é um fator de proteção contra falsos positivos. Em contrapartida, os Falsos Positivos (FP - Humano $\to$ IA) apresentam uma distribuição deslocada para a esquerda em relação aos TN, sugerindo que humanos com escrita excessivamente técnica entram na zona de risco de classificação.
+Por fim, a Figura \ref{fig:bert_boxplot} mostra o o \textit{boxplot} da distribuição de subjetividade nos acertos e erros do modelo. Observa-se que os Verdadeiros Negativos (Humanos Corretos) possuem a maior média de subjetividade, indicando que a presença de marcas estilísticas pessoais é um fator de proteção contra falsos positivos. Em contrapartida, os Falsos Positivos (Humano $\to$ IA) apresentam uma distribuição deslocada para a esquerda em relação aos TN, sugerindo que humanos com escrita excessivamente técnica entram na zona de risco de classificação.
 
 Entretanto, é notável a presença de numerosos \textit{outliers} de alta subjetividade na classe Verdadeiros Positivos (TP). Isso demonstra que, embora o detector tenha um forte viés para associar objetividade à IA (evidenciado pela concentração da caixa à esquerda), ele retém capacidade de detecção em casos onde a IA gera textos subjetivos.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figures/Fig4_Analise_Erro_Boxplot.png}
-    \caption{Distribuição de subjetividade por resultado da classificação.}
+    \caption{Distribuição de subjetividade por resultado da classificação (BERT-Base).}
     \label{fig:bert_boxplot}
 \end{figure}
 
 
-\subsection{Arquitetura B: DistilBERT}
-\label{ssec:distilbert}
+\subsubsection{Arquitetura B: DistilBERT (1) e DeBERTa(2)}
+\label{ssec:res-distilbert}
 
-Nesta configuração, utilizamos o modelo \texttt{distilbert-base-uncased} ...
-
-\subsubsection{Desempenho nas Tarefas Base}
-
-As Tabelas \ref{tab:distilbert_sd} e \ref{tab:distilbert_mgtd} apresentam os relatórios de classificação detalhados.
-
-% Tabela SD - DistilBERT
-\begin{table}[H]
-\centering
-\small
-\caption{Resultados do DistilBERT na Detecção de Subjetividade (NewsSD).}
-\label{tab:distilbert_sd}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
-\midrule
-Objetivo (OBJ)    & 0.00 & 0.00 & 0.00 & 0 \\
-Subjetivo (SUBJ)  & 0.00 & 0.00 & 0.00 & 0 \\
-\midrule
-\textit{Acurácia}     &      &      & 0.00 & 0 \\
-\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-% Tabela MGTD - DistilBERT
-\begin{table}[H]
-\centering
-\small
-\caption{Resultados do DistilBERT em MGTD (SemEval-2024).}
-\label{tab:distilbert_mgtd}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Classe} & \textbf{Precisão} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Suporte} \\
-\midrule
-Humano  & 0.00 & 0.00 & 0.00 & 0 \\
-Máquina & 0.00 & 0.00 & 0.00 & 0 \\
-\midrule
-\textit{Acurácia}     &      &      & 0.00 & 0 \\
-\textit{Média Ar.}    & 0.00 & 0.00 & 0.00 & 0 \\
-\textit{Média Ge.} & 0.00 & 0.00 & 0.00 & 0 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsubsection{Análise de Viés e Robustez}
+Abaixo, é possível analisar o modelo DistilBERT utilizando o índice de subjetividade gerado no conjunto de dados de detecção de textos gerados por IA. O conjunto de dados foi reduzido a uma amostra randomizada de diferentes documentos, isso e a natureza da distinção das arquiteturas justifica alterações visíveis entre os resultados.
 
 \paragraph{Viés de Estilo (Q1):} 
 
+A figura \ref{fig:distilbertbert_kde} mostra o gráfico de  densidade, que ficou bem similar ao gráfico da Figura \ref{fig:bert_kde}. 
+
+A tabela \ref{tab:subj_stats_distilbertbert} também evidencia e sugere uma tendência maior de textos humanos apresentarem maior índice de subjetividade.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/deberta_subj_prob_density.png}
+    \caption{Curva de estimativa de densidade de Kernel do modelo  DistilBERT}
+    \label{fig:distilbertbert_kde}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Estatísticas do Índice de Subjetividade ($I_{subj}$) no SemEval.}
+    \label{tab:subj_stats_distilbertbert}
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Origem} & \textbf{Média $I_{subj}$} & \textbf{Desvio padrão} \\
+    \midrule
+    Texto Humano & 0.4172 & 0.1530 \\
+    Texto Máquina & 0.2450 & 0.1263 \\
+    \bottomrule
+    \end{tabular}
+\end{table}
 
 \paragraph{Robustez à Subjetividade (Q2):} 
+Nesse parágrafo, analogamente à seção anterior, iremos analisar se a subjetividade tem correlação com a classificação da detecção de texto gerado por LLM. A figura \ref{fig:arqb_log_regression} ilustra o mesmo fenômeno que vimos anteriormente: textos com baixa subjetividade tendem a ser classificados como IA.
 
 
-\subsection{Arquitetura C: RoBERTa}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/regressao_cross_ia_sub.png}
+    \caption{Correlação entre subjetividade e probabilidade de detecção de IA para a arquitetura}
+    \label{fig:arqb_log_regression}
+\end{figure}
+
+A figura \ref{fig:arqc_boxplot} representa o \textit{boxplot} da distribuição de subjetividade na matriz de confusão do modelo.
+A cauda à direita observada no grupo de FN indica a presença de textos humanos com subjetividade excepcionalmente elevada. Esses casos extremos parecem divergir do padrão estilístico típico da escrita humana presente no corpus, levando o modelo a classificá-los incorretamente como IA. Os resultados apresentam os mesmos padrões representados na figura \ref{fig:bert_boxplot}, direcionando às mesmas inferências analisadas na seção anterior.
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{relatorio/figures/box_plot_cross_confusion.png}
+    \caption{Distribuição de subjetividade por resultado da classificação (Arquitetura B).}
+    \label{fig:arqc_boxplot}
+\end{figure}
+
+\subsubsection{Arquitetura C: RoBERTa}
 \label{ssec:roberta}
 
-Finalmente, avaliamos o modelo \texttt{roberta-base},...
-
+\iffalse
 \subsubsection{Desempenho nas Tarefas Base}
 
 O modelo foi avaliado nos conjuntos de teste oficiais. Para a tarefa de subjetividade, utilizamos o \textit{dev set} da Tarefa 1 como teste, e para a detecção de MGT, utilizamos o \textit{test set} oficial da Tarefa 2. As tabelas \ref{tab:roberta_sd} e \ref{tab:roberta_mgtd} detalham o desempenho.
@@ -239,17 +267,18 @@ Máquina & 0.78 & 0.90 & 0.84 & 18000 \\
 \end{tabular}
 \end{table}
 
-\subsubsection{Análise de Viés e Robustez}
 
+\subsubsection{Análise de Viés e Robustez}
+\fi
 Avaliamos o modelo sob duas perspectivas críticas, viés de classificação e impacto da subjetividade.
 
 \paragraph{Viés de Estilo (Q1):} 
-Observando a Tabela \ref{tab:roberta_mgtd}, o RoBERTa demonstra um viés claro em direção à máquina. O \textit{Recall} para textos de máquina é alto (0.90), indicando que o modelo é eficaz em capturar conteúdo sintético. No entanto, a \textit{Precisão} para esta classe é inferior (0.78), o que implica uma taxa considerável de falsos positivos. 
+Observando a Tabela \ref{tab:all_mgtd}, o RoBERTa demonstra um viés claro em direção à máquina. O \textit{Recall} para textos de máquina é alto (0.90), indicando que o modelo é eficaz em capturar conteúdo sintético. No entanto, a Precisão para esta classe é inferior (0.78), o que implica uma taxa considerável de falsos positivos. 
 Isso nos sugere que o modelo tende a classificar textos humanos que possuam características estilísticas rígidas ou genéricas como sendo gerados por IA, penalizando a autoria humana a fim de uma detecção mais abrangente.
 
 Ademais, a Tabela \ref{tab:subj_stats} apresenta a comparação estatística do Índice de Subjetividade Médio ($I_{subj}$) entre os textos de origem humana e sintética no conjunto de teste. A Figura \ref{fig:kde_dist} ilustra visualmente as distribuições de densidade.
 
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \caption{Estatísticas do Índice de Subjetividade ($I_{subj}$) no SemEval.}
     \label{tab:subj_stats}
@@ -264,20 +293,20 @@ Ademais, a Tabela \ref{tab:subj_stats} apresenta a comparação estatística do 
 \end{table}
 
 Apesar da média global ser similar, a distribuição dos textos humanos (curva azul) apresenta um pico acentuado na região de extrema objetividade ($I_{subj} < 0.1$), enquanto a distribuição dos textos de máquina é mais dispersa, com maior densidade nas faixas intermediárias de subjetividade. 
-Isso indica que, neste \textit{benchmark} específico, os textos humanos tendem a ser mais factuais e "secos" do que as gerações de IA, invertendo o viés estilístico tradicional onde se espera que a máquina seja a mais neutra.
+Isso indica que, neste \textit{benchmark} específico, os textos humanos tendem a ser mais factuais e ``secos'' do que as gerações de IA, invertendo o viés estilístico tradicional onde se espera que a máquina seja a mais neutra.
 
 \begin{figure}[H]
     \centering
     
     \includegraphics[width=1\linewidth]{figures/roberta_hist.png}
-    \caption{Distribuição de densidade das pontuações de subjetividade para textos humanos e de IA.}
+    \caption{Distribuição de densidade das pontuações de subjetividade para textos humanos e de IA (RoBERTa).}
     \label{fig:kde_dist}
 \end{figure}
 
 \paragraph{Robustez à Subjetividade (Q2):} 
-Para investigar se a subjetividade prejudica a detecção, cruzamos as previsões com os scores gerados pelo modelo especialista. O corpus da Tarefa de detecção mostrou-se predominantemente objetivo (média de subjetividade $\approx 0.19$). 
+Para investigar se a subjetividade prejudica a detecção, cruzamos as previsões com os scores gerados pelo modelo especialista. O corpus da Tarefa 2 mostrou-se predominantemente objetivo (média de subjetividade $\approx 0.19$). 
 
-A Figura \ref{fig:roberta_trend} apresenta a coreelação entre a subjetividade e a confiança do detector na classe IA. Diferentemente de modelos menores que tendem a perder confiança em textos subjetivos, a linha de tendência do RoBERTa apresenta-se praticamente plana. Isso indica que, em nível global, o modelo dissociou a característica "subjetividade" da característica "texto de máquina", e manteve sua confiança estável independentemente do teor opinativo do texto.
+A Figura \ref{fig:roberta_trend} apresenta a coreelação entre a subjetividade e a confiança do detector na classe IA. Diferentemente de modelos menores que tendem a perder confiança em textos subjetivos, a linha de tendência do RoBERTa apresenta-se praticamente plana. Isso indica que, em nível global, o modelo dissociou a característica ``subjetividade'' da característica ``texto de máquina'', e manteve sua confiança estável independentemente do teor opinativo do texto.
 
 \begin{figure}[H]
     \centering
@@ -291,7 +320,7 @@ A análise de sensibilidade por faixas, apresentada na Figura \ref{fig:roberta_b
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figures/roberta_accuracy_bins.png} 
-    \caption{Desempenho do classificador RoBERTa segmentado por faixas de subjetividade.}
+    \caption{Desempenho do classificador RoBERTa segmentado por faixas de subjetividade (RoBERTa).}
     \label{fig:roberta_bins}
 \end{figure}
 
@@ -307,8 +336,8 @@ Contra nossa hipótese inicial de que o modelo falharia aleatoriamente, observou
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figures/roberta_error_boxplot.png} 
-    \caption{Distribuição de subjetividade por tipo de erro.}
+    \caption{Distribuição de subjetividade por tipo de erro (RoBERTa).}
     \label{fig:roberta_boxplot}
 \end{figure}
 
-Concluímos que o RoBERTa é altamente robusto, mas apresenta um viés específico. O modelo parece ter aprendido que uma "opinião forte" é, frequentemente, característica de alucinações ou estilo argumentativo de IA, levando-o a penalizar humanos que escrevem com alto teor de subjetividade.
+Concluímos que o RoBERTa é altamente robusto, mas apresenta um viés específico. O modelo parece ter aprendido que uma ´´opinião forte'' é, frequentemente, característica de alucinações ou estilo argumentativo de IA, levando-o a penalizar humanos que escrevem com alto teor de subjetividade.
