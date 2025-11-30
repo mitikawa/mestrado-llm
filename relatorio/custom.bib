@@ -32,6 +32,14 @@ abstract = {Sentiment analysis requires a lot of information coming from differe
       url={https://arxiv.org/abs/2310.14724}, 
 }
 
+@article{liu2019roberta,
+  title={RoBERTa: A Robustly Optimized BERT Pretraining Approach},
+  author={Liu, Yinhan and Ott, Myle and Goyal, Naman and Du, Jingfei and Joshi, Mandar and Chen, Danqi and Levy, Omer and Lewis, Mike and Zettlemoyer, Luke and Stoyanov, Veselin},
+  journal={arXiv preprint arXiv:1907.11692},
+  year={2019},
+  url={https://arxiv.org/abs/1907.11692}
+}
+
 @inproceedings{wang-etal-2024-semeval-2024,
     title = "{S}em{E}val-2024 Task 8: Multidomain, Multimodel and Multilingual Machine-Generated Text Detection",
     author = "Wang, Yuxia  and
@@ -181,4 +189,74 @@ abstract = {Sentiment analysis requires a lot of information coming from differe
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2508.07959}, 
+}
+
+@misc{sanh2020distilbertdistilledversionbert,
+      title={DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter}, 
+      author={Victor Sanh and Lysandre Debut and Julien Chaumond and Thomas Wolf},
+      year={2020},
+      eprint={1910.01108},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/1910.01108}, 
+}
+
+@misc{he2021debertadecodingenhancedbertdisentangled,
+      title={DeBERTa: Decoding-enhanced BERT with Disentangled Attention}, 
+      author={Pengcheng He and Xiaodong Liu and Jianfeng Gao and Weizhu Chen},
+      year={2021},
+      eprint={2006.03654},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2006.03654}, 
+}
+
+
+@inproceedings{guo-etal-2024-ustc,
+    title = "{USTC}-{BUPT} at {S}em{E}val-2024 Task 8: Enhancing Machine-Generated Text Detection via Domain Adversarial Neural Networks and {LLM} Embeddings",
+    author = "Guo, Zikang  and
+      Jiao, Kaijie  and
+      Yao, Xingyu  and
+      Wan, Yuning  and
+      Li, Haoran  and
+      Xu, Benfeng  and
+      Zhang, Licheng  and
+      Wang, Quan  and
+      Zhang, Yongdong  and
+      Mao, Zhendong",
+    editor = {Ojha, Atul Kr.  and
+      Do{\u{g}}ru{\"o}z, A. Seza  and
+      Tayyar Madabushi, Harish  and
+      Da San Martino, Giovanni  and
+      Rosenthal, Sara  and
+      Ros{\'a}, Aiala},
+    booktitle = "Proceedings of the 18th International Workshop on Semantic Evaluation (SemEval-2024)",
+    month = jun,
+    year = "2024",
+    address = "Mexico City, Mexico",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.semeval-1.217/",
+    doi = "10.18653/v1/2024.semeval-1.217",
+    pages = "1511--1522",
+    abstract = "This paper introduces the system developed by USTC-BUPT for SemEval-2024 Task 8. The shared task comprises three subtasks across four tracks, aiming to develop automatic systems to distinguish between human-written and machine-generated text across various domains, languages and generators. Our system comprises four components: DATeD, LLAM, TLE, and AuDM, which empower us to effectively tackle all subtasks posed by the challenge. In the monolingual track, DATeD improves machine-generated text detection by incorporating a gradient reversal layer and integrating additional domain labels through Domain Adversarial Neural Networks, enhancing adaptation to diverse text domains. In the multilingual track, LLAM employs different strategies based on language characteristics. For English text, the LLM Embeddings approach utilizes embeddings from a proxy LLM followed by a two-stage CNN for classification, leveraging the broad linguistic knowledge captured during pre-training to enhance performance. For text in other languages, the LLM Sentinel approach transforms the classification task into a next-token prediction task, which facilitates easier adaptation to texts in various languages, especially low-resource languages. TLE utilizes the LLM Embeddings method with a minor modification in the classification strategy for subtask B. AuDM employs data augmentation and fine-tunes the DeBERTa model specifically for subtask C. Our system wins the multilingual track and ranks second in the monolingual track. Additionally, it achieves third place in both subtask B and C."
+}
+
+@misc{vaswani2023attentionneed,
+      title={Attention Is All You Need}, 
+      author={Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},
+      year={2023},
+      eprint={1706.03762},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/1706.03762}, 
+}
+
+@misc{hu2021loralowrankadaptationlarge,
+      title={LoRA: Low-Rank Adaptation of Large Language Models}, 
+      author={Edward J. Hu and Yelong Shen and Phillip Wallis and Zeyuan Allen-Zhu and Yuanzhi Li and Shean Wang and Lu Wang and Weizhu Chen},
+      year={2021},
+      eprint={2106.09685},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2106.09685}, 
 }

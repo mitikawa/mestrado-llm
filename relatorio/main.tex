@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[portuguese]{babel} 
+\usepackage{dirtytalk}
 
 \usepackage{times}
 \usepackage{latexsym}
@@ -16,23 +17,28 @@
 \title{Análise da Interseção entre Subjetividade Linguística e Detecção de Texto Gerado por IA}
 
 % Os 3 autores do grupo
-\author{Joao \\
+\author{João Guilherme de Freitas Rocha \\
   UFF \\
-  \texttt{email1@exemplo.br} \\\And
-  Marcelo \\
+  \texttt{\small{jofreitas@id.uff.br}} \\\And
+  Marcelo Campanelli\\
   UFF \\
-  \texttt{email2@exemplo.br} \\\And
-  Mateus \\
+  \texttt{\small{marcelocampanelli@id.uff.br}} \\\And
+  Mateus Abreu Itikawa \\
   UFF \\
-  \texttt{email3@exemplo.br} \\}
+  \texttt{\small{mitikawa@id.uff.br}} \\}
 
 \begin{document}
 \maketitle
 
 
 \begin{abstract}
-Placeholder resumo
+A crescente capacidade dos Large Language Models (LLMs) de produzirem textos fluentes e coerentes tornou a distinção entre escrita humana e sintética um desafio técnico relevante. Nesse contexto, detectores de texto gerado por IA (\textit{Machine Generated Text Detection} — MGTD) ainda apresentam fragilidades, sobretudo na generalização para modelos não vistos ou para domínios fora de distribuição. Paralelamente, estudos recentes sugerem que LLMs exibem um viés estilístico sistemático em direção à objetividade, ao passo que a escrita humana tende a expressar maior subjetividade. 
+
+Motivado por essa hipótese, este trabalho investiga empiricamente a relação entre subjetividade linguística e a eficiência de detectores MGTD. Para isso, em diferentes configurações de arquitetura BERT-Based (BERT, DistilBERT,DeBERTa e RoBERTa), treinamos dois classificadores especializados: um modelo de Detecção de Subjetividade (SD) e um modelo de MGTD, aplicando o primeiro sobre os dados de teste do segundo. A análise cruzada revelou padrões robustos: (i) textos humanos são significativamente mais subjetivos do que textos gerados por LLMs; (ii) detectores MGTD apresentam forte dependência dessa característica estilística; (iii) níveis extremos de subjetividade em textos humanos aumentam a taxa de falsos positivos, enquanto maior objetividade favorece classificações incorretas como IA.
+
+Os resultados indicam que parte substancial do desempenho dos detectores deriva da exploração indireta do grau de subjetividade. Concluímos que a subjetividade tende a atuar como variável crítica para a robustez dos detectores e sugerimos que futuras linhas de pesquisa desenvolvam técnicas de calibração capazes de dissociar estilo e origem textual, mitigando penalizações injustas a textos humanos muito opinativos ou criativos.
 \end{abstract}
+
 
 \input{sections/01_introducao.tex}
 \input{sections/02_trabalhos_relacionados.tex}
@@ -43,7 +49,7 @@ Placeholder resumo
 \input{sections/07_limitacoes.tex}
 \input{sections/08_consideracoes_eticas.tex}
 
-\bibliographystyle{acl_natbib} 
+%\bibliographystyle{acl_natbib} 
 \bibliography{custom}
 
 \end{document}
